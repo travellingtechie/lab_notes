@@ -8,6 +8,25 @@
   - 192.168.64.1/18
   - No DHCP
 
+## Active Directory
+- Add users
+  - vcfuser
+  - vcfapprover
+- Add Groups
+  - vcfuser
+  - vcfapprover
+ 
+## vIDM
+- Add Active Directory
+  - vcf.holo.lab
+    - Does not support DNS Service Location
+    - 10.0.0.2
+    - dc=vcf,dc=holo,dc=lab
+    - cn=administrator,dc=vcf,dc=holo,dc=lab
+    - VMware123!
+  - Domain Admins, Domain Users, Enterprise Admins
+  - User DNs: cn=users,dc=vcf,dc=holo,dc=lab
+
 
 ## Aria Automation without Quickstart
 - Add Cloud Account
@@ -22,6 +41,11 @@
 - New Project
   - VLC Holodeck
   - Add Users
+    - vcfuser
+      - member, viewer
+    - vcfapprover
+      - viewer, supervisor
+
 
 ## Customize Cloud Assembly
 - Create Flavor Mappings
