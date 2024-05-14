@@ -1,4 +1,9 @@
-## Aria Auto
+## vCenter-MGMT Prerequisites
+- Create VM Folder: Recovered VMs
+
+## NSX-MGMT
+- Create prod-net
+
 ## vCenter-WLD Prerequisites
 - Create VM Folder: Production
 - Download and add Ubuntu-18.04 to Content Library
@@ -36,12 +41,15 @@ Administration Console > Identity and Access Management
 - Hide Quickstart page
 - Assembler > Infrastructure > Cloud Account
 - Add Cloud Account
-  - VCF
-    - VLC-Holo-Site-1-WLD1
-      - WLD-01
-      - Use vCenter and NSX Creds
-      - Add env:prod and env:dev tags
-- Cloud Zone
+  - vCenter
+    - vcenter-wld
+    - administrator@vsphere.local
+    - tags: env:prod env:dev site:ny site:la
+  - NSX
+    - nsx-wld
+    - admin
+    - tags: env:prod
+ - Cloud Zone
   - Add Folder: Production
   - Add Tags:  env:dev env:prodprod-net
 - New Project
@@ -51,9 +59,34 @@ Administration Console > Identity and Access Management
       - member, viewer
     - vcfapprover
       - viewer, supervisor
-
+## Kubernetes Configuration
+- Resources > Supervisors > Add Supervisor Cluster
+  - accoutn: vcenter-wld
+  - supervisor cluster: wld01-c01
+- resources > Supervisors > New Supervisor Namespace
+  - Name: aria-namespace
+  - account: vcenter-wld
+  - supervisor Cluster
+- Kubernetes Zone
+  - Account: vcenter-wld
+  - Name: vcenter-wld-k8s
+  - tags: env:prod env:dev
+  - Provisioning
+    - Add Compute
+      - Compute: wld01-c01
+      - aria-namespace
+- Project > VLC Holodeck > Kubernetes Provisioning
+  - Add k8s
+- Configure > Cluster Plans
+  - New Cluster Plan
+    - Account: vcenter-wld
+    - Name: vcenter-wld-k8s-cluster-plan
+    - version 1.26
+    - Control plane 1 best-effort-small
+    - Workers: 2 best-effort-small
 
 ## Customize Cloud Assembly
+
 - Create Flavor Mappings
   - small 1,1,1
   - medium 1,2,2
@@ -67,12 +100,13 @@ Administration Console > Identity and Access Management
     - Network: prod-net
       - domain: vcf.sddc.lab
       - dns: 8.8.8.8
+    - IP Range
+      - Prod IP Range
+      - 192.168.66.100-192.168.67.200
     - Network Policies
       - T0
       - Add Edge Cluster
-- IP Range
-  - Prod IP Range
-    - 192.168.66.100-192.168.67.200
+
 
 
 ## Add Templates
@@ -137,8 +171,13 @@ Administration Console > Identity and Access Management
   - Aria Automation
 
 ## NSX for Aria Logs
-- NSX Mgr
-- NSX Edges
+- NSX Mgrs, edges
+  - ssh
+```
+set logging-server aria-logs.vcf.sddc.lab proto udp level info
+```
+This didnt' work
+
 
 ## Deploy Shopping Cart App
 
@@ -183,19 +222,18 @@ Test-VcfReportingPrereq
   - No gateway
   - No DHCP
 
-## Deploy Ubuntu-VM
-
 
 ## Aria Automation Catalog
-- Identity and Access Management
+- Start > Identity and Access Management
   - Add roles to vcfuser and vcfapprover
-- Create version of all apps
+- Assembler > Design
+  - Create version of all apps (if not done)
   - check box to release to catalog
-- Content & Policies
-  - New COntent Source
-    - VLC Holodeck Templates
-    - VLC Holodeck project
-- New Content Sharing Policy
+- Service Broker > Content & Policies
+  - New Content Source
+    - Name: VLC Holodeck Templates
+    - Source Project: VLC Holodeck project
+- Polices > Definitions > New Content Sharing Policy
   - VLC Holodeck
   - Scope: VLC Holodeck
   - Add Content Source
@@ -203,5 +241,28 @@ Test-VcfReportingPrereq
     - vcfuser
     - vcfapprover
 - Add Approvcal Policy
-  - Template equals Hybrid Shopping Cart App
-  - 
+  - Name: VLC Holodeck Approval Policy
+  - Scope: VLC Holodeck
+  - Criteria: Template equals Hybrid Shopping Cart App
+  - Approvers: vcf approver
+  - Actions: Deployment.Create Cloud.vSphere.Machine.Add.Disk
+
+## vCenter Changes for vMotion
+- Add advanced parameter to allow vMotion between vDSs
+  - config.vpxd.network.allowVmotionBetweenLogicalSwitches  True
+
+## Deploy Ubuntu-VM
+- Create ubuntu customization specification
+- Deploy ubuntu-vm1
+- Deploy ubuntu-vm2
+
+## Changes for VCSR Labs (moved these to appropriate spot above)
+- MGMT NSX  (Save this for lab)
+  - add dev-net
+  - add prod-net
+- MGMT vCenter
+  - Create Folders
+    - Recovered VMs
+  - Create Resource Pool
+    - Recovered VMs
+- Update from https://github.com/KBrookfield/VCF-Demo
