@@ -1,9 +1,11 @@
+```
 cd C:\VCF-Demo-main
 kubectl vsphere login --server 10.80.0.2 --vsphere-username administrator@vsphere.local 
 kubectl config use-context namespace-1
 kubectl apply -f mysql-vm.yaml
---
+```
 ## New IaaS Lab for Workshop
+```
 cd C:\VCF-Demo-main
 kubectl vsphere login --server 10.80.0.2 --vsphere-username administrator@vsphere.local 
 kubectl config use-context namespace-1
@@ -47,4 +49,4 @@ nano frontend-app.yaml
 kubectl apply -f frontend-app.yaml -n app-ns
 kubectl get pod -n app-ns
 kubectl get service -n app-ns
-
+```
