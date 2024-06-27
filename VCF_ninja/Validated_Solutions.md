@@ -1,3 +1,4 @@
+```
 cd C:\VCF-ValidatedSolutions\
 
 $PSVersionTable
@@ -24,3 +25,5 @@ $sddcManagerLocalUser = "root"
 $sddcManagerLocalPass = "VMware123!"
 
 Invoke-VcfHealthReport -sddcManagerFqdn $sddcManagerFqdn -sddcManagerUser $sddcManagerUser -sddcManagerPass $sddcManagerPass -sddcManagerLocalUser $sddcManagerLocalUser -sddcManagerLocalPass $sddcManagerLocalPass -reportPath $reportPath -allDomains -failureOnly
+
+```

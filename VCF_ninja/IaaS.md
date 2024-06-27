@@ -36,7 +36,7 @@ kubeclt get nodes
 
 kubectl create ns app-ns
 kubectl label --overwrite ns --all pod-security.kubernetes.io/enforce=privileged
-kubectl create secret docker-registry docker-hub-creds --docker-server=harbor.vcf.sddc.lab --docker-username=admin --docker-password=Harbor12345 -n app-ns
+kubectl create secret docker-registry docker-hub-creds --docker-server=harbor.vcf.sddc.lab --docker-username=admin --docker-password=VMware123! -n app-ns
 kubectl apply -f backend-app.yaml -n app-ns
 kubectl get pod -n app-ns
 kubectl get service -n app-ns
